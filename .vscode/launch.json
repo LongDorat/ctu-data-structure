@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "name": "Run Program with MSVC (cl.exe)",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "preLaunchTask": "Build with MSVC (Debug)",
+            "program": "${workspaceFolder}/bin/debug-windows/${fileBasenameNoExtension}.exe",
+            "cwd": "${workspaceFolder}/bin/debug-windows",
+            "stopAtEntry": false,
+            "console": "integratedTerminal"
+        },
+    ]
+}
