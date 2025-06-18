@@ -15,13 +15,13 @@ typedef struct
     int size;
 } List;
 
-char *str_dub(char *str)
+char *str_dup(char *str)
 {
-    int len = 0;
-    while (str[len] != '\0')
-        len++;
+    int len = strlen(str);
+    if (len == 0)
+        return NULL;
 
-    char *new_str = (char *)malloc((2 * len + 1) * sizeof(char));
+    char *new_str = (char *)malloc((len + 1) * sizeof(char));
     if (new_str == NULL)
         return NULL;
 
@@ -36,19 +36,36 @@ char *str_dub(char *str)
 
 char *get_line()
 {
-    char *line = (char *)malloc(100 * sizeof(char));
+    int bufsize = 100;
+    int i = 0;
+    char *line = (char *)malloc(bufsize * sizeof(char));
     if (line == NULL)
         return NULL;
 
-    int i = 0;
-    char c;
+    int c;
     while ((c = getchar()) != '\n' && c != EOF)
     {
-        line[i++] = c;
-        if (i >= 100) // Prevent buffer overflow
-            break;
+        if (i >= bufsize - 1)
+        {
+            bufsize *= 2;
+            char *new_line = realloc(line, bufsize * sizeof(char));
+            if (new_line == NULL)
+            {
+                free(line);
+                return NULL;
+            }
+            line = new_line;
+        }
+        line[i++] = (char)c;
     }
     line[i] = '\0';
+
+    // If the line was too long, consume the rest of the input until newline or EOF
+    if (c != '\n' && c != EOF)
+    {
+        while ((c = getchar()) != '\n' && c != EOF)
+            ;
+    }
 
     return line;
 }
@@ -69,26 +86,37 @@ void readList(List *pL)
             return;
         }
 
+        // Getting the ID, theory score, and lab score
         sscanf(buffer, "%d %lf %lf",
                &pL->list[pL->size].id,
                &pL->list[pL->size].theory_score,
                &pL->list[pL->size].lab_score);
-
+        
+        // Allocate memory for the name
         pL->list[pL->size].name = (char *)malloc(100 * sizeof(char));
+        if (pL->list[pL->size].name == NULL)
+        {
+            printf("Memory allocation failed.\n");
+            free(buffer);
+            return;
+        }
+
+        // Extracting the name from the buffer
+        // Assuming the name is the rest of the line after the ID, theory score, and lab score
         char *name_part = strtok(buffer, " ");
         char *first_name = NULL, *last_name = NULL;
-        int dumpID;
+        int dumpster; // Variable to hold the integer part of the buffer
         while (name_part != NULL)
         {
-            if (sscanf(name_part, "%d", &dumpID) != 1)
+            if (sscanf(name_part, "%d", &dumpster) != 1)
             {
                 if (first_name == NULL)
                 {
-                    first_name = str_dub(name_part);
+                    first_name = str_dup(name_part);
                 }
                 else
                 {
-                    last_name = str_dub(name_part);
+                    last_name = str_dup(name_part);
                     if (last_name != NULL)
                     {
                         snprintf(pL->list[pL->size].name, 100, "%s %s", first_name, last_name);
@@ -99,6 +127,9 @@ void readList(List *pL)
             }
             name_part = strtok(NULL, " ");
         }
+        free(name_part);
+        free(first_name);
+        free(last_name);
 
         pL->size++;
         free(buffer);
@@ -146,6 +177,7 @@ void printHighestScore(List *pL)
     }
     printf("There are %d students received %lf", HighestScoreCount, HighestScoreList.list[0].final_score);
 }
+
 void printAverageScore(List *pL)
 {
     double averageTheory = 0;
