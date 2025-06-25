@@ -46,3 +46,17 @@ ElementType front(Queue *queue)
     }
     return queue->front->next->data;
 }
+
+ElementType de_queue(Queue *queue)
+{
+    struct Node *temp = queue->front->next;
+    ElementType data = temp->data;
+    queue->front->next = temp->next;
+    if (queue->rear == temp)
+    {
+        queue->rear = queue->front;
+    }
+    free(temp);
+    queue->size--;
+    return data;
+}
