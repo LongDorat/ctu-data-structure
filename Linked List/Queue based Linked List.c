@@ -26,3 +26,13 @@ int is_empty(const Queue *queue)
 {
     return queue->size == 0;
 }
+
+void en_queue(ElementType x, Queue *queue)
+{
+    struct Node *newNode = malloc(sizeof(struct Node));
+    newNode->data = x;
+    newNode->next = NULL;
+    queue->rear->next = newNode;
+    queue->rear = newNode;
+    queue->size++;
+}
