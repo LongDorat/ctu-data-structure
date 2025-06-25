@@ -21,3 +21,8 @@ void makenull(Queue *queue)
     queue->rear = queue->front;
     queue->size = 0;
 }
+
+int is_empty(const Queue *queue)
+{
+    return queue->size == 0;
+}
