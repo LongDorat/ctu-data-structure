@@ -36,3 +36,13 @@ void en_queue(ElementType x, Queue *queue)
     queue->rear = newNode;
     queue->size++;
 }
+
+ElementType front(Queue *queue)
+{
+    if (is_empty(queue))
+    {
+        fprintf(stderr, "Queue is empty\n");
+        exit(EXIT_FAILURE);
+    }
+    return queue->front->next->data;
+}
