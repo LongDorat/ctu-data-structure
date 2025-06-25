@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 typedef struct
 {
@@ -101,6 +102,18 @@ void addMonomial(Monomial monomial, Polynomial *polynomial)
     add_node_after_current(monomial, polynomial, current);
 }
 
+Polynomial read_from_console(int nums)
+{
+    Polynomial polynomial = init();
+    Monomial monomial;
+    for (int i = 0; i < nums; i++)
+    {
+        scanf("%lf %d", &monomial.coeff, &monomial.expo);
+        addMonomial(monomial, &polynomial);
+    }
+    return polynomial;
+}
+
 void print(Polynomial polynomial)
 {
     Node *current = polynomial->next;
@@ -113,18 +126,6 @@ void print(Polynomial polynomial)
         current = current->next;
     }
     printf("\n");
-}
-
-Polynomial read_from_console(int nums)
-{
-    Polynomial polynomial = init();
-    Monomial monomial;
-    for (int i = 0; i < nums; i++)
-    {
-        scanf("%lf %d", &monomial.coeff, &monomial.expo);
-        addMonomial(monomial, &polynomial);
-    }
-    return polynomial;
 }
 
 Polynomial addition(Polynomial polynomial1, Polynomial polynomial2)
@@ -169,17 +170,56 @@ Polynomial addition(Polynomial polynomial1, Polynomial polynomial2)
     return result;
 }
 
+double valuate(Polynomial polynomial, double x)
+{
+    double result = 0;
+    Node *current = polynomial->next;
+    while (current != NULL)
+    {
+        result += current->data.coeff * pow(x, current->data.expo);
+        current = current->next;
+    }
+    return result;
+}
+
+Polynomial derivative(Polynomial polynomial)
+{
+    Monomial temp_monomial;
+
+    Polynomial result = init();
+
+    Node *polynomial_current = polynomial->next;
+    while (polynomial_current != NULL)
+    {
+        if (polynomial_current->data.expo == 0)
+        {
+            polynomial_current = polynomial_current->next;
+            continue;
+        }
+
+        temp_monomial.coeff = polynomial_current->data.coeff;
+        temp_monomial.expo = polynomial_current->data.expo;
+
+        temp_monomial.coeff *= temp_monomial.expo;
+        temp_monomial.expo--;
+
+        addMonomial(temp_monomial, &result);
+        polynomial_current = polynomial_current->next;
+    }
+
+    return result;
+}
+
 int main()
 {
-    int nums1, nums2;
-    scanf("%d %d", &nums1, &nums2);
-    Polynomial polynomial1 = read_from_console(nums1);
-    Polynomial polynomial2 = read_from_console(nums2);
+    int nums;
+    double x;
+    scanf("%d %lf", &nums, &x);
 
-    Polynomial addition_result = addition(polynomial1, polynomial2);
+    Polynomial polynomial = init();
+    polynomial = read_from_console(nums);
 
-    print(polynomial1);
-    print(polynomial2);
-    print(addition_result);
-
+    print(polynomial);
+    printf("%.8lf\n", valuate(polynomial, x));
+    print(derivative(polynomial));
 }
