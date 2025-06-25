@@ -60,3 +60,14 @@ ElementType de_queue(Queue *queue)
     queue->size--;
     return data;
 }
+
+void print(Queue *queue)
+{
+    struct Node *current = queue->front->next;
+    while (current != NULL)
+    {
+        printf("%d ", current->data);
+        current = current->next;
+    }
+    printf("\n");
+}
