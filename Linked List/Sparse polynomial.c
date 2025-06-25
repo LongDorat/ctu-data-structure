@@ -3,7 +3,7 @@
 
 typedef struct
 {
-    double coef;
+    double coeff;
     int expo;
 } Monomial;
 
@@ -16,9 +16,9 @@ typedef Node *Polynomial;
 
 Polynomial init()
 {
-    Polynomial polynominal = malloc(sizeof(Polynomial));
-    polynominal->next = NULL;
-    return polynominal;
+    Polynomial polynomial = malloc(sizeof(Node));
+    polynomial->next = NULL;
+    return polynomial;
 }
 
 void add_node_after_current(Monomial monomial, Polynomial *polynomial, Node *current)
@@ -73,9 +73,9 @@ void addMonomial(Monomial monomial, Polynomial *polynomial)
         // If the exponent is equal, add the coefficient
         if (current->data.expo == monomial.expo)
         {
-            current->data.coef += monomial.coef;
+            current->data.coeff += monomial.coeff;
             // If the coefficient becomes zero, remove the node
-            if (current->data.coef == 0)
+            if (current->data.coeff == 0)
             {
                 Node *to_delete = current;
                 current = current->next;
@@ -106,24 +106,80 @@ void print(Polynomial polynomial)
     Node *current = polynomial->next;
     while (current != NULL)
     {
-        if (current->data.coef != 0)
+        if (current->data.coeff != 0)
         {
-            printf("(%.2lf, %d) ", current->data.coef, current->data.expo);
+            printf("(%.2lf, %d) ", current->data.coeff, current->data.expo);
         }
         current = current->next;
     }
     printf("\n");
 }
 
+Polynomial read_from_console(int nums)
+{
+    Polynomial polynomial = init();
+    Monomial monomial;
+    for (int i = 0; i < nums; i++)
+    {
+        scanf("%lf %d", &monomial.coeff, &monomial.expo);
+        addMonomial(monomial, &polynomial);
+    }
+    return polynomial;
+}
+
+Polynomial addition(Polynomial polynomial1, Polynomial polynomial2)
+{
+    Polynomial result = init();
+    Node *current1 = polynomial1->next;
+    Node *current2 = polynomial2->next;
+
+    while (current1 != NULL || current2 != NULL)
+    {
+        Monomial monomial;
+        if (current1 == NULL)
+        {
+            monomial = current2->data;
+            current2 = current2->next;
+        }
+        else if (current2 == NULL)
+        {
+            monomial = current1->data;
+            current1 = current1->next;
+        }
+        else if (current1->data.expo < current2->data.expo)
+        {
+            monomial = current1->data;
+            current1 = current1->next;
+        }
+        else if (current1->data.expo > current2->data.expo)
+        {
+            monomial = current2->data;
+            current2 = current2->next;
+        }
+        else
+        {
+            monomial.coeff = current1->data.coeff + current2->data.coeff;
+            monomial.expo = current1->data.expo;
+            current1 = current1->next;
+            current2 = current2->next;
+        }
+        addMonomial(monomial, &result);
+    }
+
+    return result;
+}
+
 int main()
 {
-    Polynomial d = init();
+    int nums1, nums2;
+    scanf("%d %d", &nums1, &nums2);
+    Polynomial polynomial1 = read_from_console(nums1);
+    Polynomial polynomial2 = read_from_console(nums2);
 
-    Monomial s1 = {6.2, 4};
-    Monomial s2 = {4.2, 0};
-    Monomial s3 = {2, 4};
-    addMonomial(s1, &d);
-    addMonomial(s2, &d);
-    addMonomial(s3, &d);
-    print(d);
+    Polynomial addition_result = addition(polynomial1, polynomial2);
+
+    print(polynomial1);
+    print(polynomial2);
+    print(addition_result);
+
 }
