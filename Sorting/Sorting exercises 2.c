@@ -18,9 +18,9 @@ void insertionSort(ListOfFan *nums, int numsSize)
         int keyReactions = (*nums)[i].reactions;
 
         int j = i - 1;
-        while (j >= 0 && ((*nums)[j].reactions > keyReactions ||
+        while (j >= 0 && ((*nums)[j].reactions < keyReactions ||
                           ((*nums)[j].reactions == keyReactions &&
-                           strcmp((*nums)[j].name, keyName) < 0)))
+                           strcmp((*nums)[j].name, keyName) > 0)))
         {
             (*nums)[j + 1].name = (*nums)[j].name;
             (*nums)[j + 1].reactions = (*nums)[j].reactions;
@@ -45,15 +45,16 @@ int main()
         fgets(userInput, 100, stdin);
         userInput[strlen(userInput) - 1] = '\0';
 
-        char *segment = strtok(userInput, " ");
-        while (segment != NULL)
+        char *lastSpace = strrchr(userInput, ' ');
+        
+        if (lastSpace != NULL)
         {
-            if (!sscanf(segment, "%d", &listOfFan[i].reactions))
-            {
-                listOfFan[i].name = (char *)malloc((strlen(segment) + 1) * sizeof(char));
-                strcpy(listOfFan[i].name, segment);
-            }
-            segment = strtok(NULL, " ");
+            *lastSpace = '\0';
+            
+            listOfFan[i].name = (char *)malloc((strlen(userInput) + 1) * sizeof(char));
+            strcpy(listOfFan[i].name, userInput);
+
+            sscanf(lastSpace + 1, "%d", &listOfFan[i].reactions);
         }
 
         free(userInput);
@@ -61,7 +62,7 @@ int main()
 
     insertionSort(&listOfFan, n);
 
-    for (int i = n - 1; i > n - k - 1; i--)
+    for (int i = 0; i < k; i++)
     {
         printf("%s\n", listOfFan[i].name);
     }
