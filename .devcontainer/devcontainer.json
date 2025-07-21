@@ -1,10 +1,14 @@
 {
     "name": "CTU Data Structure",
     "image": "mcr.microsoft.com/devcontainers/cpp:1-ubuntu-22.04",
-    "runArgs": ["--name", "${localWorkspaceFolderBasename}-devcontainer"],
+    "runArgs": [
+        "--name",
+        "${localWorkspaceFolderBasename}-devcontainer"
+    ],
     "features": {
         "ghcr.io/devcontainers/features/git:1": {},
-        "ghcr.io/devcontainers/features/github-cli:1": {}
+        "ghcr.io/devcontainers/features/github-cli:1": {},
+        "ghcr.io/devcontainers/features/powershell:1": {}
     },
     "customizations": {
         "vscode": {
@@ -37,7 +41,8 @@
                 "files.autoSave": "afterDelay",
                 "files.autoSaveDelay": 1000,
                 "workbench.iconTheme": "material-icon-theme",
-                "workbench.colorTheme": "One Dark Pro Monokai Darker"
+                "workbench.colorTheme": "One Dark Pro Monokai Darker",
+                "cSpell.diagnosticLevel": "Hint"
             }
         }
     },
