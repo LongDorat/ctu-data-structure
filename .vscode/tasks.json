@@ -30,6 +30,51 @@
 				"showReuseMessage": true,
 				"clear": false
 			}
+		},
+		{
+			"type": "cppbuild",
+			"label": "Build with GCC (Debug)",
+			"command": "/usr/bin/gcc",
+			"args": [
+				"-fdiagnostics-color=always",
+				"-g",
+				"-Wall",
+				"-Wextra",
+				"-std=c99",
+				"${file}",
+				"-o",
+				"${workspaceFolder}/bin/debug-linux/${fileBasenameNoExtension}"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"detail": "C/C++: gcc build active file (Debug) - for devcontainer",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared",
+				"showReuseMessage": true,
+				"clear": false
+			},
+			"problemMatcher": ["$gcc"]
+		},
+		{
+			"type": "shell",
+			"label": "Run Program (Linux)",
+			"command": "${workspaceFolder}/bin/debug-linux/${fileBasenameNoExtension}",
+			"group": "test",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"dependsOn": "Build with GCC (Debug)"
 		}
 	]
 }
