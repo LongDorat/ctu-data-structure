@@ -2,16 +2,9 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"type": "cppbuild",
+			"type": "shell",
 			"label": "Build with MSVC (Debug)",
-			"command": "cl.exe",
-			"args": [
-				"/Zi",
-				"/EHsc",
-				"/nologo",
-				"/Fe${workspaceFolder}\\bin\\debug-windows\\${fileBasenameNoExtension}.exe",
-				"${file}"
-			],
+			"command": "cl.exe /Zi /EHsc /nologo /Fe${workspaceFolder}\\bin\\debug-windows\\${fileBasenameNoExtension}.exe ${file}",
 			"options": {
 				"cwd": "${workspaceFolder}\\bin\\debug-windows"
 			},
@@ -19,32 +12,12 @@
 				"$msCompile"
 			],
 			"group": "build",
-			"detail": "User defined C/C++: cl.exe build active file (Debug)",
-			"dependsOrder": "sequence",
-			"dependsOn": [],
-			"presentation": {
-				"echo": true,
-				"reveal": "silent",
-				"focus": false,
-				"panel": "shared",
-				"showReuseMessage": true,
-				"clear": false
-			}
+			"detail": "Shell: cl.exe build active file (Debug)",
 		},
 		{
-			"type": "cppbuild",
+			"type": "shell",
 			"label": "Build with GCC (Debug)",
-			"command": "/usr/bin/gcc",
-			"args": [
-				"-fdiagnostics-color=always",
-				"-g",
-				"-Wall",
-				"-Wextra",
-				"-std=c99",
-				"${file}",
-				"-o",
-				"${workspaceFolder}/bin/debug-linux/${fileBasenameNoExtension}"
-			],
+			"command": "gcc -fdiagnostics-color=always -g -Wall -Wextra -std=c99 \"${file}\" -o \"${workspaceFolder}/bin/debug-linux/${fileBasenameNoExtension}\"",
 			"options": {
 				"cwd": "${workspaceFolder}"
 			},
@@ -52,29 +25,8 @@
 				"kind": "build",
 				"isDefault": true
 			},
-			"detail": "C/C++: gcc build active file (Debug) - for devcontainer",
-			"presentation": {
-				"echo": true,
-				"reveal": "always",
-				"focus": false,
-				"panel": "shared",
-				"showReuseMessage": true,
-				"clear": false
-			},
+			"detail": "Shell: gcc build active file (Debug) - for devcontainer",
 			"problemMatcher": ["$gcc"]
-		},
-		{
-			"type": "shell",
-			"label": "Run Program (Linux)",
-			"command": "${workspaceFolder}/bin/debug-linux/${fileBasenameNoExtension}",
-			"group": "test",
-			"presentation": {
-				"echo": true,
-				"reveal": "always",
-				"focus": false,
-				"panel": "shared"
-			},
-			"dependsOn": "Build with GCC (Debug)"
 		}
 	]
 }
