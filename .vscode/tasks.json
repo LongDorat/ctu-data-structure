@@ -6,20 +6,15 @@
 			"label": "Build with MSVC (Debug)",
 			"command": "cl.exe",
 			"args": [
-				"/nologo",
-				"/Zi",
-				"/W3",
-				"/WX",
-				"/D",
-				"_DEBUG",
-				"/D",
-				"UNICODE",
-				"/D",
-				"_UNICODE",
-				"/EHsc",
-				"/Fe:",
-				"${workspaceFolder}\\bin\\debug-windows\\${fileBasenameNoExtension}.exe",
-				"${file}"
+                "/nologo",
+                "/Zi",
+                "/W3",
+                "/D_DEBUG",
+                "/EHsc",
+                "/Fe${workspaceFolder}\\bin\\debug-windows\\${fileBasenameNoExtension}.exe",
+                "${file}",
+				// only uncomment this line if you want to build all C files in the directory
+				//"${fileDirname}\\*.c",
 			],
 			"options": {
 				"cwd": "${workspaceFolder}\\bin\\debug-windows"
@@ -28,7 +23,7 @@
 				"$msCompile"
 			],
 			"group": "build",
-			"detail": "Shell: cl.exe build active file (Debug)",
+			"detail": "MSVC: cl.exe build active file (Debug)",
 		},
 		{
 			"type": "shell",
