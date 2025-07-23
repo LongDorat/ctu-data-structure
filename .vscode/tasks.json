@@ -2,9 +2,25 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"type": "shell",
+			"type": "cppbuild",
 			"label": "Build with MSVC (Debug)",
-			"command": "cl.exe /Zi /EHsc /nologo /Fe${workspaceFolder}\\bin\\debug-windows\\${fileBasenameNoExtension}.exe ${file}",
+			"command": "cl.exe",
+			"args": [
+				"/nologo",
+				"/Zi",
+				"/W3",
+				"/WX",
+				"/D",
+				"_DEBUG",
+				"/D",
+				"UNICODE",
+				"/D",
+				"_UNICODE",
+				"/EHsc",
+				"/Fe:",
+				"${workspaceFolder}\\bin\\debug-windows\\${fileBasenameNoExtension}.exe",
+				"${file}"
+			],
 			"options": {
 				"cwd": "${workspaceFolder}\\bin\\debug-windows"
 			},
